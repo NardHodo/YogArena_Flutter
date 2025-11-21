@@ -15,29 +15,74 @@ class _Login_RegistrationState extends State<Login_Registration>{
   final TextEditingController _usernameProcess = TextEditingController();
   final TextEditingController _passwordProcess = TextEditingController();
 
+
+
+
   @override
   void dispose() {
     _usernameProcess.dispose();
     super.dispose();
   }
 
- Future<void> _showLoginDialog(BuildContext context)async{
+
+  //call dialog function
+  Future<void> _showLoginDialog(BuildContext context)async{
     return showDialog(context: context, builder: (BuildContext context){
       double screenWidth = MediaQuery.of(context).size.width;
       double screenHeight = MediaQuery.of(context).size.height;
+      bool obscurePassword = true;
 
+
+
+      //build dialog layout
       return AlertDialog(
         backgroundColor: MainColors.color_three,
-          content: SingleChildScrollView(
-            child: SizedBox(
-              width: screenWidth * 0.3,
-              height: screenHeight * 0.8,
-              child: Column(
-                children: <Widget>[
-                  const Text("Welcome Back!", style: TextStyle(fontSize: 20, fontFamily: 'Merriweather_Bold', color: Colors.white),),
-                  TextField(
-                    controller: _usernameProcess,
-                    decoration: const InputDecoration(labelText: 'Username', labelStyle: TextStyle(color: Colors.white, fontFamily: 'Merriweather_Regular'),
+        content: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: SizedBox(
+            width: screenWidth * 0.3,
+            height: screenHeight * 0.8,
+            child: Column(
+              children: <Widget>[
+                const Text("Welcome Back!", style: TextStyle(fontSize: 20, fontFamily: 'Merriweather_Bold', color: Colors.white),),
+                TextField(
+                  cursorColor: Colors.white,
+                  style: TextStyle(
+                    fontFamily: 'Merriweather_Bold',
+                    fontSize: 15,
+                    color: Colors.white,
+                  ),
+                  controller: _usernameProcess,
+                  decoration: const InputDecoration(labelText: 'Username', labelStyle: TextStyle(color: Colors.white, fontFamily: 'Merriweather_Regular'),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: 2.0,
+                          )
+                      ),
+
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.white,
+                              width: 3.0
+                          )
+                      )
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+
+                TextField(
+                    cursorColor: Colors.white,
+                    style: TextStyle(
+                        fontFamily: 'Merriweather_Bold',
+                        fontSize: 15,
+                        color: Colors.white,
+                    ),
+                    controller: _passwordProcess,
+                    obscureText: obscurePassword,
+                    decoration: const InputDecoration(
+                        labelText: 'Password',
+                        labelStyle: TextStyle(color: Colors.white, fontFamily: 'Merriweather_Regular'),
                         enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
                               color: Colors.white,
@@ -50,81 +95,76 @@ class _Login_RegistrationState extends State<Login_Registration>{
                                 color: Colors.white,
                                 width: 3.0
                             )
-                        )
-                    ),
-                  ),
-                  const SizedBox(height: 16.0),
-
-                  TextField(
-                      controller: _passwordProcess,
-                      decoration: const InputDecoration(labelText: 'Password', labelStyle: TextStyle(color: Colors.white, fontFamily: 'Merriweather_Regular'),
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.white,
-                                width: 2.0,
-                              )
-                          ),
-
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.white,
-                                  width: 3.0
-                              )
-                          ))
-                  ),
-                 Center(
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 24.0),
-                      child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {Navigator.pop(context);},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: MainColors.color_five,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
+                        ))
+                ),
+                Expanded(
+                    child: Align(
+                      alignment: AlignmentGeometry.bottomCenter,
+                      child: Container(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {Navigator.pop(context);},
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                foregroundColor: MainColors.color_five,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                              ),
+                              child: const Text(
+                                'Cancel',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Merriweather_Bold',
+                                    fontWeight: FontWeight.bold
+                                ),
+                              ),
                             ),
-                          ),
-                          child: const Text(
-                            'Cancel',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontFamily: 'Merriweather_Bold',
-                                fontWeight: FontWeight.bold
-                            ),
-                          ),
+                            ElevatedButton(
+                              onPressed: () {debugPrint('Button Pressed');},
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                foregroundColor: MainColors.color_five,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                              ),
+                              child: const Text(
+                                'Confirm',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Merriweather_Bold',
+                                    fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                        ElevatedButton(
-                          onPressed: () {debugPrint('Button Pressed');},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: MainColors.color_five,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                          ),
-                          child: const Text(
-                            'Confirm',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontFamily: 'Merriweather_Bold',
-                                fontWeight: FontWeight.bold
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    ),
-                 )
-                ],
-              ),
+                      ),
+                    ))
+              ],
             ),
           ),
+        ),
       );
     },);
- }
+  }
+
+  // Future<void> _showRegistrationDialog(BuildContext context)async{
+  //   return showDialog(context: context, builder: (BuildContext context){
+  //     double screenWidth = MediaQuery.of(context).size.width;
+  //     double screenHeight = MediaQuery.of(context).size.height;
+  //
+  //     return AlertDialog(
+  //       backgroundColor: MainColors.color_three,
+  //       insetPadding: ,
+  //     )
+  //   });
+  // }
+
 
 
   @override
@@ -135,7 +175,7 @@ class _Login_RegistrationState extends State<Login_Registration>{
       backgroundColor: MainColors.color_one,
       body: SafeArea(
           child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              padding: const EdgeInsets.only(top: 1.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -143,7 +183,7 @@ class _Login_RegistrationState extends State<Login_Registration>{
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 1),
                             Image.asset(
                               'assets/images/main_title_logo.png',
                               width: 400,
