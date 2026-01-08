@@ -10,4 +10,8 @@ class MainColors {
 
   static const Color color_six = Color(0xFF97A68F);
   static const Color color_seven = Color.fromRGBO(103, 140, 128, 1);
+
+  //Dailies Color
+  static const Color dailiesBg = Color.fromRGBO(226, 214, 200, 1);
+  static const Color dailiesBorder = Color.fromRGBO(103, 97, 64, 1);
 }

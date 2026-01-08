@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_projects/main_colors.dart';
+import 'dart:math' as math;
 
 class MainMenu extends StatefulWidget {
   const MainMenu({super.key});
@@ -25,85 +26,209 @@ class _MainMenuState extends State<MainMenu> {
             ),
           ),
           Positioned(
-            left: 30.0,
-            top: 30.0,
-            child: ElevatedButton(
-              onPressed: () {
-                debugPrint("Profile Button Pressed");
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: MainColors.color_three,
-                foregroundColor: Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-              ),
-              child: SizedBox(
-                height: 50,
-                width: 140,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Image.asset('assets/images/profile_icon_one.png'),
-                    ),
-                    //horizontal spacing
-                    SizedBox(width: 20),
-
-                    Padding(
-                      padding: EdgeInsetsGeometry.symmetric(
-                        horizontal: 5.0,
-                        vertical: 15.0,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Player Name",
-                            style: TextStyle(
-                              fontFamily: 'Merriweather_Regular',
+            right: 45,
+            top: 50,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                SizedBox(
+                  height:
+                      75.0, //needs to be responsive since magiging maliit siya sa malalaking screen
+                  width: 200.0,
+                  child: Transform.rotate(
+                    angle: -3 * (math.pi / 180),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            debugPrint("Play Button Pressed");
+                          },
+                          icon: Image.asset('assets/images/play_button.png'),
+                          iconSize: 20.0,
+                          style: IconButton.styleFrom(
+                            elevation: 10,
+                            shadowColor: const Color.fromARGB(
+                              127,
+                              158,
+                              158,
+                              158,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
                             ),
                           ),
-                          SizedBox(),
-                        ],
+                        ),
+                        IgnorePointer(
+                          child: Text(
+                            "PLAY",
+                            style: TextStyle(
+                              fontSize: 27,
+                              fontFamily: 'Merriweather_Bold',
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 50),
+
+                SizedBox(
+                  height: 60.0, //needs to be responsive
+                  width: 160.0,
+                  child: Transform.rotate(
+                    angle: 3 * (math.pi / 180),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            debugPrint("Tutorial Button Pressed");
+                          },
+                          icon: Image.asset(
+                            'assets/images/tutorial_button.png',
+                          ),
+                          iconSize: 20.0,
+                          style: IconButton.styleFrom(
+                            elevation: 10,
+                            shadowColor: const Color.fromARGB(
+                              127,
+                              158,
+                              158,
+                              158,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                            ),
+                          ),
+                        ),
+                        IgnorePointer(
+                          //kasi nag o overlap yung hitbox nung text sa button
+                          child: Text(
+                            "Tutorials",
+                            style: TextStyle(
+                              fontFamily: 'Merriweather_Bold',
+                              fontSize: 17,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 30),
+
+                SizedBox(
+                  height: 60.0, //needs to be responsive
+                  width: 160.0,
+                  child: Transform.rotate(
+                    angle: -3 * (math.pi / 180),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            debugPrint("Options Button Pressed");
+                          },
+                          icon: Image.asset('assets/images/options_button.png'),
+                          iconSize: 20.0,
+                          style: IconButton.styleFrom(
+                            elevation: 5,
+                            shadowColor: const Color.fromARGB(
+                              127,
+                              158,
+                              158,
+                              158,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                            ),
+                          ),
+                        ),
+                        IgnorePointer(
+                          //kasi nag o overlap yung hitbox nung text sa button
+                          child: Text(
+                            "Options",
+                            style: TextStyle(
+                              fontFamily: 'Merriweather_Bold',
+                              fontSize: 17,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 45.0, top: 50.0, bottom: 50.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: FractionallySizedBox(
+                widthFactor: 0.6,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 5,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/dailies_bg.png'),
+                          ),
+                          color: MainColors.dailiesBg,
+                          borderRadius: BorderRadius.circular(2),
+                          border: Border.all(
+                            color: MainColors.dailiesBorder,
+                            width: 3.0,
+                          ),
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 100,
+                                height: 100,
+                                child: IconButton(
+                                  padding: EdgeInsets.all(10.0),
+                                  onPressed: () {
+                                    debugPrint("Add Button Pressed");
+                                  },
+                                  icon: Image.asset(
+                                    'assets/images/add_dailies.png',
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                "Create your own Daily Goal Sets",
+                                style: TextStyle(
+                                  fontFamily: 'Nunito_Bold',
+                                  fontSize: 15.0,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ],
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: 30.0,
-            right: 30.0,
-            child: ElevatedButton(
-              onPressed: () {
-                debugPrint("Settings Button Pressed");
-              },
-              child: const Text("Settings Button"),
-            ),
-          ),
-          Positioned(
-            bottom: 30.0,
-            right: 30.0,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6.0),
-                ),
-                foregroundColor: Colors.black,
-                fixedSize: const Size(150, 50),
-              ),
-              onPressed: () {
-                debugPrint("Play Button Pressed");
-              },
-              child: const Text(
-                "PLAY",
-                style: TextStyle(
-                  fontFamily: 'Merriweather_Bold',
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
