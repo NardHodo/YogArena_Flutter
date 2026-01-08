@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_projects/camera_permissions.dart';
-import 'package:flutter_projects/loading_screen.dart';
 import 'package:flutter_projects/login_registration.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_projects/main_colors.dart';
@@ -19,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight
+      DeviceOrientation.landscapeRight,
     ]);
 
     return MaterialApp(
@@ -40,25 +39,25 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class BlankWhiteTransition extends StatefulWidget{
+class BlankWhiteTransition extends StatefulWidget {
   const BlankWhiteTransition({super.key});
 
   @override
   State<BlankWhiteTransition> createState() => _BlankTransitionScreenState();
 }
 
-class _BlankTransitionScreenState extends State<BlankWhiteTransition>{
+class _BlankTransitionScreenState extends State<BlankWhiteTransition> {
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
-    Future.delayed(const Duration(milliseconds: 1000), (){
+    Future.delayed(const Duration(milliseconds: 1000), () {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
               const Login_Registration(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child){
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(opacity: animation, child: child);
           },
           transitionDuration: const Duration(milliseconds: 800),
@@ -68,7 +67,7 @@ class _BlankTransitionScreenState extends State<BlankWhiteTransition>{
   }
 
   @override
-  Widget build(BuildContext){
+  Widget build(BuildContext) {
     return const Scaffold(
       backgroundColor: MainColors.color_one,
       body: SizedBox.expand(),
@@ -92,9 +91,10 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => const Login_Registration(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child){
-            return FadeTransition(opacity: animation, child: child,);
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const Login_Registration(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
           },
           transitionDuration: const Duration(milliseconds: 500),
         ),
@@ -102,9 +102,7 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (context) => const CameraPermissionScreen(),
-        ),
+        MaterialPageRoute(builder: (context) => const CameraPermissionScreen()),
       );
     }
   }

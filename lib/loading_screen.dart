@@ -3,19 +3,19 @@ import 'package:flutter_projects/login_registration.dart';
 import 'package:flutter_projects/main_colors.dart';
 import 'package:flutter_projects/profiling_survey.dart';
 
-class LoadingIndicator extends StatefulWidget{
+class LoadingIndicator extends StatefulWidget {
   const LoadingIndicator({super.key});
 
   @override
   State<LoadingIndicator> createState() => _LoadingIndicatorState();
 }
 
-class _LoadingIndicatorState extends State<LoadingIndicator>{
+class _LoadingIndicatorState extends State<LoadingIndicator> {
   bool _isLoading = false;
   double _progressValue = 0.0;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _startLoading();
   }
@@ -28,29 +28,26 @@ class _LoadingIndicatorState extends State<LoadingIndicator>{
 
     const int totalSteps = 10; //loading steps
 
-    for(int step = 1; step <= totalSteps; step++){
+    for (int step = 1; step <= totalSteps; step++) {
       await Future.delayed(const Duration(milliseconds: 300));
-      double newProgress = step/totalSteps;
+      double newProgress = step / totalSteps;
 
-      setState(() { //update loading
+      setState(() {
+        //update loading
         _progressValue = newProgress;
       });
     }
 
-    setState(() { // stop when done
+    setState(() {
+      // stop when done
       _isLoading = false;
     });
-    
-    if(!LoginState.isRegistered){
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const Profiling(),
-        ),
-      );
-    } else {
-      debugPrint("User is Registered");
-    }
+
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const Login_Registration()),
+    );
   }
 
   @override
@@ -133,9 +130,7 @@ class _LoadingIndicatorState extends State<LoadingIndicator>{
             visible: false,
             child: Container(
               color: Colors.black.withOpacity(0.4),
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: const Center(child: CircularProgressIndicator()),
             ),
           ),
         ],
@@ -143,5 +138,3 @@ class _LoadingIndicatorState extends State<LoadingIndicator>{
     );
   }
 }
-
-
