@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_projects/loading_screen.dart';
 import 'package:flutter_projects/main_colors.dart';
+import 'package:flutter_projects/profiling_survey.dart';
+
+class LoginState {
+  static bool isRegistered = false;
+}
 
 
 class Login_Registration extends StatefulWidget{
@@ -24,6 +30,19 @@ class _Login_RegistrationState extends State<Login_Registration>{
     super.dispose();
   }
 
+  void loadGame(){
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => const LoadingIndicator(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child){
+          return FadeTransition(opacity: animation, child: child,);
+        },
+        transitionDuration: const Duration(milliseconds: 500),
+      ),
+    );
+  }
+
 
   //call dialog function
   Future<void> _showLoginDialog(BuildContext context)async{
@@ -31,8 +50,6 @@ class _Login_RegistrationState extends State<Login_Registration>{
       double screenWidth = MediaQuery.of(context).size.width;
       double screenHeight = MediaQuery.of(context).size.height;
       bool obscurePassword = true;
-
-
 
       //build dialog layout
       return AlertDialog(
@@ -53,7 +70,7 @@ class _Login_RegistrationState extends State<Login_Registration>{
                     color: Colors.white,
                   ),
                   controller: _usernameProcess,
-                  decoration: const InputDecoration(labelText: 'Username', labelStyle: TextStyle(color: Colors.white, fontFamily: 'Merriweather_Regular'),
+                  decoration: const InputDecoration(labelText: 'Username', labelStyle: TextStyle(color: Colors.white, fontFamily: 'Merriweather_Regular', fontSize: 13),
                       enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
                             color: Colors.white,
@@ -82,7 +99,7 @@ class _Login_RegistrationState extends State<Login_Registration>{
                     obscureText: obscurePassword,
                     decoration: const InputDecoration(
                         labelText: 'Password',
-                        labelStyle: TextStyle(color: Colors.white, fontFamily: 'Merriweather_Regular'),
+                        labelStyle: TextStyle(color: Colors.white, fontFamily: 'Merriweather_Regular', fontSize: 13),
                         enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
                               color: Colors.white,
@@ -124,7 +141,7 @@ class _Login_RegistrationState extends State<Login_Registration>{
                               ),
                             ),
                             ElevatedButton(
-                              onPressed: () {debugPrint('Button Pressed');},
+                              onPressed: () {loadGame(); LoginState.isRegistered = true;},
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.white,
                                 foregroundColor: MainColors.color_five,
@@ -153,17 +170,155 @@ class _Login_RegistrationState extends State<Login_Registration>{
     },);
   }
 
-  // Future<void> _showRegistrationDialog(BuildContext context)async{
-  //   return showDialog(context: context, builder: (BuildContext context){
-  //     double screenWidth = MediaQuery.of(context).size.width;
-  //     double screenHeight = MediaQuery.of(context).size.height;
-  //
-  //     return AlertDialog(
-  //       backgroundColor: MainColors.color_three,
-  //       insetPadding: ,
-  //     )
-  //   });
-  // }
+  Future<void> _showRegistrationDialog(BuildContext context)async{
+    return showDialog(context: context, builder: (BuildContext context){
+      double screenWidth = MediaQuery.of(context).size.width;
+      double screenHeight = MediaQuery.of(context).size.height;
+
+      return AlertDialog(
+        backgroundColor: MainColors.color_three,
+        content: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: SizedBox(
+            width: screenWidth * 0.3,
+            height: screenHeight * 0.8,
+            child: Column(
+              children: <Widget>[
+                const Text("Welcome Back!", style: TextStyle(fontSize: 20, fontFamily: 'Merriweather_Bold', color: Colors.white),),
+                TextField(
+                  cursorColor: Colors.white,
+                  style: TextStyle(
+                    fontFamily: 'Merriweather_Bold',
+                    fontSize: 15,
+                    color: Colors.white,
+                  ),
+                  controller: _usernameProcess,
+                  decoration: const InputDecoration(labelText: 'Create a Username', labelStyle: TextStyle(color: Colors.white, fontFamily: 'Merriweather_Regular', fontSize: 13),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.white,
+                            width: 2.0,
+                          )
+                      ),
+
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.white,
+                              width: 3.0
+                          )
+                      )
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+
+                TextField(
+                    cursorColor: Colors.white,
+                    style: TextStyle(
+                      fontFamily: 'Merriweather_Bold',
+                      fontSize: 15,
+                      color: Colors.white,
+                    ),
+                    controller: _passwordProcess,
+                    decoration: const InputDecoration(
+                        labelText: 'Create a Password',
+                        labelStyle: TextStyle(color: Colors.white, fontFamily: 'Merriweather_Regular', fontSize: 13),
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.white,
+                              width: 2.0,
+                            )
+                        ),
+
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.white,
+                                width: 3.0
+                            )
+                        ))
+                ),
+
+                const SizedBox(height: 16.0),
+
+                TextField(
+                  cursorColor: Colors.white,
+                  style: TextStyle(
+                    fontFamily: 'Merriweather_Bold',
+                    color: Colors.white,
+                    fontSize: 15
+                  ),
+                  controller: _passwordProcess,
+                    decoration: const InputDecoration(
+                        labelText: 'Confirm Password',
+                        labelStyle: TextStyle(color: Colors.white, fontFamily: 'Merriweather_Regular', fontSize: 13),
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.white,
+                              width: 2.0,
+                            )
+                        ),
+
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.white,
+                                width: 3.0
+                            )
+                        ))
+                ),
+                Expanded(
+                    child: Align(
+                      alignment: AlignmentGeometry.bottomCenter,
+                      child: Container(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {Navigator.pop(context);},
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                foregroundColor: MainColors.color_five,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                              ),
+                              child: const Text(
+                                'Cancel',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Merriweather_Bold',
+                                    fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {loadGame();},
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                foregroundColor: MainColors.color_five,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                              ),
+                              child: const Text(
+                                'Confirm',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Merriweather_Bold',
+                                    fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ))
+              ],
+            ),
+          ),
+        ),
+      );
+    });
+  }
 
 
 
@@ -219,7 +374,7 @@ class _Login_RegistrationState extends State<Login_Registration>{
                             ),
                              ),
                           ElevatedButton(
-                              onPressed: () {debugPrint('Button Pressed');},
+                              onPressed: () {_showRegistrationDialog(context);},
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: MainColors.color_six,
                                 foregroundColor: MainColors.color_five,

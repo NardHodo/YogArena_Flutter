@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_projects/login_registration.dart';
 import 'package:flutter_projects/main_colors.dart';
+import 'package:flutter_projects/profiling_survey.dart';
 
 class LoadingIndicator extends StatefulWidget{
   const LoadingIndicator({super.key});
@@ -39,13 +40,17 @@ class _LoadingIndicatorState extends State<LoadingIndicator>{
     setState(() { // stop when done
       _isLoading = false;
     });
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const Login_Registration(),
-      ),
-    );
+    
+    if(!LoginState.isRegistered){
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Profiling(),
+        ),
+      );
+    } else {
+      debugPrint("User is Registered");
+    }
   }
 
   @override
