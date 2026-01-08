@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_projects/login_registration.dart';
 import 'package:flutter_projects/main_colors.dart';
 
-class LoadingIndicator extends StatefulWidget{
+class LoadingIndicator extends StatefulWidget {
   const LoadingIndicator({super.key});
 
   @override
   State<LoadingIndicator> createState() => _LoadingIndicatorState();
 }
 
-class _LoadingIndicatorState extends State<LoadingIndicator>{
+class _LoadingIndicatorState extends State<LoadingIndicator> {
   bool _isLoading = false;
   double _progressValue = 0.0;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _startLoading();
   }
@@ -27,24 +27,24 @@ class _LoadingIndicatorState extends State<LoadingIndicator>{
 
     const int totalSteps = 10; //loading steps
 
-    for(int step = 1; step <= totalSteps; step++){
+    for (int step = 1; step <= totalSteps; step++) {
       await Future.delayed(const Duration(milliseconds: 300));
-      double newProgress = step/totalSteps;
+      double newProgress = step / totalSteps;
 
-      setState(() { //update loading
+      setState(() {
+        //update loading
         _progressValue = newProgress;
       });
     }
 
-    setState(() { // stop when done
+    setState(() {
+      // stop when done
       _isLoading = false;
     });
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
-        builder: (context) => const Login_Registration(),
-      ),
+      MaterialPageRoute(builder: (context) => const Login_Registration()),
     );
   }
 
@@ -128,9 +128,7 @@ class _LoadingIndicatorState extends State<LoadingIndicator>{
             visible: false,
             child: Container(
               color: Colors.black.withOpacity(0.4),
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: const Center(child: CircularProgressIndicator()),
             ),
           ),
         ],
@@ -138,5 +136,3 @@ class _LoadingIndicatorState extends State<LoadingIndicator>{
     );
   }
 }
-
-
