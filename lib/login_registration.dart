@@ -194,7 +194,7 @@ class _Login_RegistrationState extends State<Login_Registration> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MainMenu()),
+                          MaterialPageRoute(builder: (context) => UIManager()),
                         );
                       },
                       style: ElevatedButton.styleFrom(

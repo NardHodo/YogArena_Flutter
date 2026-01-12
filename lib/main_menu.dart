@@ -2,15 +2,53 @@ import 'package:flutter/material.dart';
 import 'package:flutter_projects/main_colors.dart';
 import 'dart:math' as math;
 
+class UIManager extends StatefulWidget {
+  const UIManager({super.key});
+
+  @override
+  State<UIManager> createState() => _UIManagerState();
+}
+
+class _UIManagerState extends State<UIManager> {
+  int _currentIndex = 1;
+
+  void _changeIndex(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(
+        index: _currentIndex,
+        children: [
+          MainMenu(
+            onStart: () => setState(() => _currentIndex = 0),
+            onOptions: () => setState(() => _changeIndex(1)),
+          ),
+          ModeSelection(onReturn: () => setState(() => _changeIndex(0))),
+        ],
+      ),
+    );
+  }
+}
+
 class MainMenu extends StatefulWidget {
-  const MainMenu({super.key});
+  final VoidCallback onStart;
+  final VoidCallback onOptions;
   final String playButton = "PLAY";
+
+  const MainMenu({super.key, required this.onStart, required this.onOptions});
 
   @override
   State<MainMenu> createState() => _MainMenuState();
 }
 
 class _MainMenuState extends State<MainMenu> {
+  int _currentScreenIndex = 0;
+
   @override
   Widget build(BuildContext) {
     return Scaffold(
@@ -42,9 +80,7 @@ class _MainMenuState extends State<MainMenu> {
                       children: [
                         IconButton(
                           padding: EdgeInsets.zero,
-                          onPressed: () {
-                            debugPrint("Play Button Pressed");
-                          },
+                          onPressed: widget.onOptions,
                           icon: Image.asset('assets/images/play_button.png'),
                           iconSize: 20.0,
                           style: IconButton.styleFrom(
@@ -229,6 +265,74 @@ class _MainMenuState extends State<MainMenu> {
                       ),
                     ),
                   ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ModeSelection extends StatelessWidget {
+  final VoidCallback onReturn;
+  const ModeSelection({super.key, required this.onReturn});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/main_menu_bg.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 27.0,
+            left: 27.0,
+            child: SizedBox(
+              height: 50,
+              width: 50,
+              child: IconButton(
+                onPressed: onReturn,
+                icon: Image.asset('assets/images/back_button_dark.png'),
+                iconSize: 50.0,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 27.0,
+            right: 27.0,
+            child: SizedBox(
+              height: 50,
+              width: 50,
+              child: IconButton(
+                onPressed: null,
+                icon: Image.asset('assets/images/help_icon.png'),
+                iconSize: 50.0,
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: SizedBox(
+              height: 75,
+              width: 250,
+              child: Container(
+                margin: EdgeInsets.only(top: 27.0),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(
+                      'assets/images/mode_selection_header.png',
+                    ),
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
             ),
