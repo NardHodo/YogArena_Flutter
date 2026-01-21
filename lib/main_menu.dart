@@ -1,6 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_projects/daily_challenges.dart';
 import 'package:flutter_projects/main_colors.dart';
 import 'dart:math' as math;
+
+import 'package:flutter_projects/options.dart';
 
 class UIManager extends StatefulWidget {
   const UIManager({super.key});
@@ -10,7 +15,7 @@ class UIManager extends StatefulWidget {
 }
 
 class _UIManagerState extends State<UIManager> {
-  int _currentIndex = 1;
+  int _currentIndex = 0;
 
   void _changeIndex(int index) {
     setState(() {
@@ -26,7 +31,7 @@ class _UIManagerState extends State<UIManager> {
         children: [
           MainMenu(
             onStart: () => setState(() => _currentIndex = 0),
-            onOptions: () => setState(() => _changeIndex(1)),
+            onModeSelection: () => setState(() => _changeIndex(1)),
           ),
           ModeSelection(onReturn: () => setState(() => _changeIndex(0))),
         ],
@@ -35,12 +40,17 @@ class _UIManagerState extends State<UIManager> {
   }
 }
 
+//Main menu screen
 class MainMenu extends StatefulWidget {
   final VoidCallback onStart;
-  final VoidCallback onOptions;
+  final VoidCallback onModeSelection;
   final String playButton = "PLAY";
 
-  const MainMenu({super.key, required this.onStart, required this.onOptions});
+  const MainMenu({
+    super.key,
+    required this.onStart,
+    required this.onModeSelection,
+  });
 
   @override
   State<MainMenu> createState() => _MainMenuState();
@@ -80,7 +90,7 @@ class _MainMenuState extends State<MainMenu> {
                       children: [
                         IconButton(
                           padding: EdgeInsets.zero,
-                          onPressed: widget.onOptions,
+                          onPressed: widget.onModeSelection,
                           icon: Image.asset('assets/images/play_button.png'),
                           iconSize: 20.0,
                           style: IconButton.styleFrom(
@@ -169,7 +179,12 @@ class _MainMenuState extends State<MainMenu> {
                         IconButton(
                           padding: EdgeInsets.zero,
                           onPressed: () {
-                            debugPrint("Options Button Pressed");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Options(),
+                              ),
+                            );
                           },
                           icon: Image.asset('assets/images/options_button.png'),
                           iconSize: 20.0,
@@ -244,7 +259,12 @@ class _MainMenuState extends State<MainMenu> {
                                 child: IconButton(
                                   padding: EdgeInsets.all(10.0),
                                   onPressed: () {
-                                    debugPrint("Add Button Pressed");
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return const DailiesDialog();
+                                      },
+                                    );
                                   },
                                   icon: Image.asset(
                                     'assets/images/add_dailies.png',
@@ -274,13 +294,27 @@ class _MainMenuState extends State<MainMenu> {
     );
   }
 }
+//main menu end
 
+//mode selection start
 class ModeSelection extends StatelessWidget {
   final VoidCallback onReturn;
+
   const ModeSelection({super.key, required this.onReturn});
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(
+      context,
+    ).size.width; //overall width ng screen
+    double customWidth = screenWidth * 0.45; // 45% of the overall width
+    double placeHolderWidth = screenWidth * 0.15; // 20% of the overall width
+
+    double screenHeight = MediaQuery.of(context).size.height;
+    double bottomPadding = MediaQuery.of(context).padding.bottom;
+    double bottomPlacing = bottomPadding + 20;
+    double placeHolderHeight = screenHeight * 0.75;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -322,7 +356,7 @@ class ModeSelection extends StatelessWidget {
           Align(
             alignment: Alignment.topCenter,
             child: SizedBox(
-              height: 75,
+              height: 70,
               width: 250,
               child: Container(
                 margin: EdgeInsets.only(top: 27.0),
@@ -334,6 +368,77 @@ class ModeSelection extends StatelessWidget {
                     fit: BoxFit.fill,
                   ),
                 ),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "Select Mode",
+                    style: TextStyle(
+                      fontFamily: 'Merriweather_Bold',
+                      fontSize: 20.0,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Center(
+            child: Container(
+              margin: EdgeInsetsDirectional.symmetric(
+                horizontal: 150.0,
+                vertical: 80.0,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 50.0,
+                children: [
+                  SizedBox(
+                    height: double.infinity,
+                    width: placeHolderWidth,
+                    child: IconButton(
+                      padding: EdgeInsets.all(0),
+                      onPressed: () {
+                        debugPrint("Practice Arena");
+                      },
+                      icon: Image.asset(
+                        'assets/images/mode_selection_placeholder_1.png',
+                        fit: BoxFit.cover,
+                        height: double.infinity,
+                        width: double.infinity,
+                      ),
+                      iconSize: 20.0,
+                      style: IconButton.styleFrom(
+                        elevation: 1,
+                        shadowColor: const Color.fromARGB(127, 158, 158, 158),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: double.infinity,
+                    width: placeHolderWidth,
+                    child: IconButton(
+                      padding: EdgeInsets.all(0),
+                      onPressed: () {
+                        debugPrint("Practice Arena");
+                      },
+                      icon: Image.asset(
+                        'assets/images/mode_selection_placeholder_2.png',
+                        fit: BoxFit.cover,
+                        height: double.infinity,
+                        width: double.infinity,
+                      ),
+                      style: IconButton.styleFrom(
+                        elevation: 1,
+                        shadowColor: const Color.fromARGB(127, 158, 158, 158),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -342,3 +447,108 @@ class ModeSelection extends StatelessWidget {
     );
   }
 }
+
+class DailiesDialog extends StatefulWidget {
+  const DailiesDialog({super.key});
+
+  @override
+  State<DailiesDialog> createState() => _DailiesDialogState();
+}
+
+class _DailiesDialogState extends State<DailiesDialog> {
+  @override
+  Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    double dialogHeight = screenHeight * 0.95;
+    double dialogWidth = screenWidth * 0.95;
+
+    return Dialog(
+      child: Container(
+        height: dialogHeight,
+        width: dialogWidth,
+        decoration: BoxDecoration(
+          color: MainColors.color_three,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 6,
+              child: Container(
+                margin: const EdgeInsets.all(15.0),
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Center(
+                        child: Text(
+                          "Select Challenges for your Dailies",
+                          style: TextStyle(
+                            fontFamily: 'Merriweather_Bold',
+                            fontSize: 17,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    //bawal positioned widget sa loob ng row (noted)
+                    Expanded(
+                      flex: 1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Available Challenges:",
+                            style: TextStyle(
+                              fontFamily: 'Nunito_Bold',
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 40,
+                            width: 40,
+                            child: IconButton(
+                              onPressed: () {
+                                debugPrint("Test");
+                              },
+                              icon: Image.asset('assets/images/shuffle.png'),
+                              style: IconButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 6,
+                      child: Row(
+                        children: [
+                          DailyChallenges(
+                            challengeId: 177013,
+                            challengeName: "Finish 1 YogArena Routine",
+                            difficulty: 2,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(flex: 4, child: Container(color: Colors.blue)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// dailies dialog end
