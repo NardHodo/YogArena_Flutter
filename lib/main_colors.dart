@@ -14,4 +14,7 @@ class MainColors {
   //Dailies Color
   static const Color dailiesBg = Color.fromRGBO(226, 214, 200, 1);
   static const Color dailiesBorder = Color.fromRGBO(103, 97, 64, 1);
+
+  //Switch Colors
+  static const Color switchActive = Color.fromRGBO(89, 129, 123, 1);
 }

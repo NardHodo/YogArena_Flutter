@@ -78,6 +78,10 @@ flutter:
       fonts:
         - asset: assets/fonts/Merriweather_24pt-Regular.ttf
           weight: 700
+    - family: Merriweather_ExtraBold
+      fonts:
+        - asset: assets/fonts/Merriweather_24pt-ExtraBold.ttf
+          weight: 800
 
 
   # To add assets to your application, add an assets section, like this:
