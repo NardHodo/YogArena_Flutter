@@ -1,9 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
 import 'package:flutter_projects/daily_challenges.dart';
 import 'package:flutter_projects/main_colors.dart';
-import 'package:flutter_projects/horizontal_dialog.dart';
+import 'package:flutter_projects/dialogs.dart';
+import 'package:flutter_projects/mode_picture.dart';
 import 'dart:math' as math;
 
 import 'package:flutter_projects/options.dart';
@@ -58,10 +60,13 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
-  int _currentScreenIndex = 0;
+  late AnimationController _swingController;
+  late Animation<double> _swingAnimation;
 
   @override
   Widget build(BuildContext) {
+    double _swingAngle = 0.0;
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
@@ -84,227 +89,210 @@ class _MainMenuState extends State<MainMenu> {
                 ),
               ),
             ),
-            Positioned(
-              right: 45,
-              top: 50,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SizedBox(
-                    height:
-                        75.0, //needs to be responsive since magiging maliit siya sa malalaking screen
-                    width: 200.0,
-                    child: Transform.rotate(
-                      angle: -3 * (math.pi / 180),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          IconButton(
-                            padding: EdgeInsets.zero,
-                            onPressed: widget.onModeSelection,
-                            icon: Image.asset('assets/images/play_button.png'),
-                            iconSize: 20.0,
-                            style: IconButton.styleFrom(
-                              elevation: 10,
-                              shadowColor: const Color.fromARGB(
-                                127,
-                                158,
-                                158,
-                                158,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0.0),
-                              ),
-                            ),
-                          ),
-                          IgnorePointer(
-                            child: Text(
-                              "PLAY",
-                              style: TextStyle(
-                                fontSize: 27,
-                                fontFamily: 'Merriweather_Bold',
-                              ),
-                            ),
-                          ),
-                        ],
+            Row(
+              children: [
+                Expanded(
+                  child: Container(height: double.infinity, color: Colors.blue),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 27.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/dailies_bg.png'),
+                        ),
+                        color: MainColors.dailiesBg,
+                        borderRadius: BorderRadius.circular(2),
+                        border: Border.all(
+                          color: MainColors.dailiesBorder,
+                          width: 3.0,
+                        ),
                       ),
-                    ),
-                  ),
-                  SizedBox(height: 50),
-
-                  SizedBox(
-                    height: 60.0, //needs to be responsive
-                    width: 160.0,
-                    child: Transform.rotate(
-                      angle: 3 * (math.pi / 180),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          IconButton(
-                            padding: EdgeInsets.zero,
-                            onPressed: () {
-                              debugPrint("Tutorial Button Pressed");
-                            },
-                            icon: Image.asset(
-                              'assets/images/tutorial_button.png',
-                            ),
-                            iconSize: 20.0,
-                            style: IconButton.styleFrom(
-                              elevation: 10,
-                              shadowColor: const Color.fromARGB(
-                                127,
-                                158,
-                                158,
-                                158,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0.0),
-                              ),
-                            ),
-                          ),
-                          IgnorePointer(
-                            //kasi nag o overlap yung hitbox nung text sa button
-                            child: Text(
-                              "Tutorials",
-                              style: TextStyle(
-                                fontFamily: 'Merriweather_Bold',
-                                fontSize: 17,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 30),
-
-                  SizedBox(
-                    height: 60.0, //needs to be responsive
-                    width: 160.0,
-                    child: Transform.rotate(
-                      angle: -3 * (math.pi / 180),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          IconButton(
-                            padding: EdgeInsets.zero,
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const OptionsManager(),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 100,
+                              height: 100,
+                              child: IconButton(
+                                padding: EdgeInsets.all(10.0),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return const DailiesDialog();
+                                    },
+                                  );
+                                },
+                                icon: Image.asset(
+                                  'assets/images/add_dailies.png',
                                 ),
-                              );
-                            },
-                            icon: Image.asset(
-                              'assets/images/options_button.png',
-                            ),
-                            iconSize: 20.0,
-                            style: IconButton.styleFrom(
-                              elevation: 5,
-                              shadowColor: const Color.fromARGB(
-                                127,
-                                158,
-                                158,
-                                158,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0.0),
                               ),
                             ),
-                          ),
-                          IgnorePointer(
-                            //kasi nag o overlap yung hitbox nung text sa button
-                            child: Text(
-                              "Options",
+                            Text(
+                              "Create your own Daily Goal Sets",
                               style: TextStyle(
-                                fontFamily: 'Merriweather_Bold',
-                                fontSize: 17,
+                                fontFamily: 'Nunito_Bold',
+                                fontSize: 15.0,
                               ),
+                              textAlign: TextAlign.center,
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 45.0,
-                top: 50.0,
-                bottom: 50.0,
-              ),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: FractionallySizedBox(
-                  widthFactor: 0.6,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        flex: 5,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(2),
+                      SizedBox(
+                        height:
+                            75.0, //needs to be responsive since magiging maliit siya sa malalaking screen
+                        width: 200.0,
+                        child: Transform.rotate(
+                          angle: -3 * (math.pi / 180),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              IconButton(
+                                padding: EdgeInsets.zero,
+                                onPressed: widget.onModeSelection,
+                                icon: Image.asset(
+                                  'assets/images/play_button.png',
+                                ),
+                                iconSize: 20.0,
+                                style: IconButton.styleFrom(
+                                  elevation: 10,
+                                  shadowColor: const Color.fromARGB(
+                                    127,
+                                    158,
+                                    158,
+                                    158,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0.0),
+                                  ),
+                                ),
+                              ),
+                              IgnorePointer(
+                                child: Text(
+                                  "START",
+                                  style: TextStyle(
+                                    fontSize: 27,
+                                    fontFamily: 'Merriweather_Bold',
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      Expanded(
-                        flex: 5,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/dailies_bg.png'),
-                            ),
-                            color: MainColors.dailiesBg,
-                            borderRadius: BorderRadius.circular(2),
-                            border: Border.all(
-                              color: MainColors.dailiesBorder,
-                              width: 3.0,
-                            ),
-                          ),
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width: 100,
-                                  height: 100,
-                                  child: IconButton(
-                                    padding: EdgeInsets.all(10.0),
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return const DailiesDialog();
-                                        },
-                                      );
-                                    },
-                                    icon: Image.asset(
-                                      'assets/images/add_dailies.png',
-                                    ),
+                      SizedBox(height: 50),
+
+                      SizedBox(
+                        height: 60.0, //needs to be responsive
+                        width: 160.0,
+                        child: Transform.rotate(
+                          angle: 3 * (math.pi / 180),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              IconButton(
+                                padding: EdgeInsets.zero,
+                                onPressed: () =>
+                                    debugPrint("Tutorial Button Pressed"),
+                                icon: Image.asset(
+                                  'assets/images/tutorial_button.png',
+                                ),
+                                iconSize: 20.0,
+                                style: IconButton.styleFrom(
+                                  elevation: 10,
+                                  shadowColor: const Color.fromARGB(
+                                    127,
+                                    158,
+                                    158,
+                                    158,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0.0),
                                   ),
                                 ),
-                                Text(
-                                  "Create your own Daily Goal Sets",
+                              ),
+                              IgnorePointer(
+                                //kasi nag o overlap yung hitbox nung text sa button
+                                child: Text(
+                                  "Tutorials",
                                   style: TextStyle(
-                                    fontFamily: 'Nunito_Bold',
-                                    fontSize: 15.0,
+                                    fontFamily: 'Merriweather_Bold',
+                                    fontSize: 17,
                                   ),
-                                  textAlign: TextAlign.center,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(height: 30),
+
+                      SizedBox(
+                        height: 60.0, //needs to be responsive
+                        width: 160.0,
+                        child: Transform.rotate(
+                          angle: -3 * (math.pi / 180),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              IconButton(
+                                padding: EdgeInsets.zero,
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const OptionsManager(),
+                                    ),
+                                  );
+                                },
+                                icon: Image.asset(
+                                  'assets/images/options_button.png',
+                                ),
+                                iconSize: 20.0,
+                                style: IconButton.styleFrom(
+                                  elevation: 5,
+                                  shadowColor: const Color.fromARGB(
+                                    127,
+                                    158,
+                                    158,
+                                    158,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0.0),
+                                  ),
+                                ),
+                              ),
+                              IgnorePointer(
+                                //kasi nag o overlap yung hitbox nung text sa button
+                                child: Text(
+                                  "Options",
+                                  style: TextStyle(
+                                    fontFamily: 'Merriweather_Bold',
+                                    fontSize: 17,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
+              ],
             ),
           ],
         ),
@@ -338,6 +326,12 @@ class _MainMenuState extends State<MainMenu> {
         return FadeTransition(opacity: anim1, child: child);
       },
     );
+  }
+
+  void _startSwingAnimation() {
+    const swing = SpringDescription(mass: 1.0, stiffness: 100.0, damping: 10.0);
+
+    final SpringSimulation simulation = SpringSimulation(swing, 1.0, 0.0, 0.0);
   }
 }
 //main menu end
@@ -393,95 +387,61 @@ class ModeSelection extends StatelessWidget {
               height: 50,
               width: 50,
               child: IconButton(
-                onPressed: null,
+                onPressed: () => _showTutorialDialog(context),
                 icon: Image.asset('assets/images/help_icon.png'),
                 iconSize: 50.0,
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: SizedBox(
-              height: 70,
-              width: 250,
-              child: Container(
-                margin: EdgeInsets.only(top: 27.0),
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(
-                      'assets/images/mode_selection_header.png',
-                    ),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Select Mode",
-                    style: TextStyle(
-                      fontFamily: 'Merriweather_Bold',
-                      fontSize: 20.0,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
           Center(
             child: Container(
-              margin: EdgeInsetsDirectional.symmetric(
-                horizontal: 150.0,
-                vertical: 80.0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 50.0,
+              padding: EdgeInsets.all(27.0),
+              width: screenWidth * 0.4,
+              height: double.infinity,
+              // color: Colors.blue,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(
-                    height: double.infinity,
-                    width: placeHolderWidth,
-                    child: IconButton(
-                      padding: EdgeInsets.all(0),
-                      onPressed: () {
-                        debugPrint("Practice Arena");
-                      },
-                      icon: Image.asset(
-                        'assets/images/mode_selection_placeholder_1.png',
-                        fit: BoxFit.cover,
-                        height: double.infinity,
-                        width: double.infinity,
+                    height: 50,
+                    width: 250,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                            'assets/images/mode_selection_header.png',
+                          ),
+                          fit: BoxFit.fill,
+                        ),
                       ),
-                      iconSize: 20.0,
-                      style: IconButton.styleFrom(
-                        elevation: 1,
-                        shadowColor: const Color.fromARGB(127, 158, 158, 158),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0.0),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Select Mode",
+                          style: TextStyle(
+                            fontFamily: 'Merriweather_Bold',
+                            fontSize: 20.0,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: double.infinity,
-                    width: placeHolderWidth,
-                    child: IconButton(
-                      padding: EdgeInsets.all(0),
-                      onPressed: () {
-                        debugPrint("Practice Arena");
-                      },
-                      icon: Image.asset(
-                        'assets/images/mode_selection_placeholder_2.png',
-                        fit: BoxFit.cover,
-                        height: double.infinity,
-                        width: double.infinity,
-                      ),
-                      style: IconButton.styleFrom(
-                        elevation: 1,
-                        shadowColor: const Color.fromARGB(127, 158, 158, 158),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0.0),
+                  Expanded(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ModePicture(
+                          imagePath:
+                              'assets/images/mode_selection_placeholder_1.png',
+                          modeName: "Practice Mode",
                         ),
-                      ),
+                        SizedBox(width: screenWidth * 0.05),
+                        ModePicture(
+                          imagePath:
+                              'assets/images/mode_selection_placeholder_2.png',
+                          modeName: "Classic Mode",
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -490,6 +450,19 @@ class ModeSelection extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showTutorialDialog(BuildContext context) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: "Dismiss",
+      barrierColor: Colors.black54,
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, anim1, anim2) {
+        return (Align(alignment: Alignment.center, child: CarouselDialog()));
+      },
     );
   }
 }
@@ -589,7 +562,42 @@ class _DailiesDialogState extends State<DailiesDialog> {
                 ),
               ),
             ),
-            Expanded(flex: 4, child: Container(color: Colors.blue)),
+            VerticalDivider(
+              width: 1,
+              thickness: 3,
+              indent: 2,
+              endIndent: 2,
+              color: Colors.white,
+            ),
+            Expanded(
+              flex: 4,
+              child: Container(
+                height: double.infinity,
+                margin: const EdgeInsets.all(15.0),
+                child: Column(
+                  children: [
+                    Text(
+                      "My Daily Goals",
+                      style: TextStyle(
+                        fontFamily: 'Merriweather_Bold',
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 3.0),
+                    Text(
+                      "0/5",
+                      style: TextStyle(
+                        fontFamily: 'Nunito_Bold',
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
